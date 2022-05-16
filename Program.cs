@@ -7,60 +7,10 @@ using System.Threading.Tasks;
 
 namespace HomeWork5
 {
-    class Message
+    struct StudentInfo
     {
-        public static string SelectByLength(string text, int n)
-        {
-            string[] words = GetWords(text);
-            return string.Join(" ", words.Where(w => w.Where(c => char.IsLetter(c)).ToArray().Length <= n));
-        }
-
-        public static string Replace(string text, char c)
-        {
-            string[] words = GetWords(text);
-            return string.Join(" ", words.Where(w => w.Last() != c));
-        }
-
-        public static string Max(string text)
-        {
-            string[] words = GetWords(text);
-            string max = "";
-            foreach (var w in words)
-            {
-                if (w.Length > max.Length) max = w;
-            }
-            return max;
-        }
-
-        public static string BuildWithMaxWords(string text)
-        {
-            string[] words = GetWords(text);
-            string max = Max(text);
-            StringBuilder resut = new StringBuilder();
-            foreach (var w in words)
-            {
-                if (w.Length == max.Length) resut.AppendFormat("{0} ", w);
-            }
-            return resut.ToString();
-        }
-
-        public static Dictionary<string, int> WordsFrequency(string text)
-        {
-            Dictionary<string, int> result = new Dictionary<string, int>();
-            string[] words = GetWords(text);
-            foreach (var w in words)
-            {
-                if (!result.ContainsKey(w)) result.Add(w, 0);
-                else result[w]++;
-            }
-            return result;
-        }
-
-        private static string[] GetWords(string text)
-        {
-            text = new string(text.Where(c => !char.IsPunctuation(c)).ToArray());
-            return text.Split(' ');
-        }
+        public string FIO;
+        public double Grade;
     }
 
     class Program
@@ -79,6 +29,30 @@ namespace HomeWork5
             var build = Message.BuildWithMaxWords("Why my kek");
             var textFreq = Message.WordsFrequency("my my Word kek kek kek epep eppss");
 
+            Console.WriteLine(IsCompare("afghw", "wghaf"));
+            
+            string str = "Иванов Иван 1 2 3\nМельников Александр 2 3 4\nКирилов Антон 3 1 1\nКринова Мария 4 1 0\nДмитриев Антон 1 1 1" +
+               "\nКоваль Михаил 1 2 1\nРазов Егор 5 2 1\nПетров Петр 1 4 0";
+            string[] text = str.Split('\n');
+            var worstStudents = ClassMatesFilter(text);
+            foreach (var student in worstStudents)
+            {
+                Console.WriteLine($"{student.FIO}, средний бал - {student.Grade}");
+            }
+
+            Console.ReadKey();
+
+        }
+
+        static bool IsCompare(string s1, string s2)
+        {
+            if (s1 == s2) return false;
+            if (s1.Length != s2.Length) return false;
+            for(int i = 0; i <s1.Length; i++)
+            {
+                if (!s2.Contains(s1[i])) return false;
+            }
+            return true;
         }
 
         static bool IsLoginCorrect(string login)
@@ -96,6 +70,35 @@ namespace HomeWork5
             return true;
         }
 
+
         static bool IsLoginCorrect(string login, Regex regex) => regex.IsMatch(login);
+
+        static List<StudentInfo> ClassMatesFilter(string[] text)
+        {
+            List<StudentInfo> stdInf = new List<StudentInfo>();
+            Regex regex = new Regex(@"^[A-Za-zА-Яа-я]{1,20}\s{1}[A-Za-zА-Яа-я]{1,15}\s{1}[0-9]{1}\s{1}[0-9]{1}\s{1}[0-9]{1}$");
+            foreach (var str in text)
+            {
+                if (regex.IsMatch(str))
+                {
+                    string[] inf = str.Split(' ');
+                    stdInf.Add(new StudentInfo
+                    {
+                        FIO = $"{inf[0]} {inf[1]}",
+                        Grade = Math.Round((int.Parse(inf[2]) + int.Parse(inf[3]) + int.Parse(inf[4])) / 3f, 2)
+                    });
+                }
+            }
+            List<StudentInfo> worstStudents = stdInf.OrderBy(s => s.Grade).Take(3).ToList();
+            foreach (var student in stdInf)
+            {
+                if (!worstStudents.Contains(student) && worstStudents.Any(ws => ws.Grade == student.Grade))
+                {
+                    worstStudents.Add(student);
+                }
+            }
+            return worstStudents.OrderBy(s => s.Grade).ToList();
+        }
+
     }
 }
