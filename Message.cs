@@ -8,10 +8,10 @@ namespace HomeWork5
 {
     static class Message
     {
-        public static string SelectByLength(string text, int n)
+        public static string[] SelectByLength(string text, int n)
         {
             string[] words = GetWords(text);
-            return string.Join(" ", words.Where(w => w.Where(c => char.IsLetter(c)).ToArray().Length <= n));
+            return words.Where(w => w.Where(c => char.IsLetter(c)).ToArray().Length <= n).ToArray();
         }
 
         public static string Replace(string text, char c)
@@ -49,7 +49,7 @@ namespace HomeWork5
             string[] words = GetWords(text);
             foreach (var w in words)
             {
-                if (!result.ContainsKey(w)) result.Add(w, 0);
+                if (!result.ContainsKey(w)) result.Add(w, 1);
                 else result[w]++;
             }
             return result;
@@ -57,7 +57,6 @@ namespace HomeWork5
 
         private static string[] GetWords(string text)
         {
-            text = new string(text.Where(c => !char.IsPunctuation(c)).ToArray());
             return text.Split(' ');
         }
     }
