@@ -7,6 +7,9 @@ using GeekBrainsLib;
 
 namespace HomeWork5
 {
+    /// <summary>
+    /// Структура информации об успеваемости студента
+    /// </summary>
     struct StudentInfo
     {
         public string FIO;
@@ -67,7 +70,12 @@ namespace HomeWork5
                 }
             }
         }
-
+        /// <summary>
+        /// Задание 1
+        /// Проверять корректность ввода логина. Корректным логином будет строка от 2 до 10 символов, 
+        /// содержащая только буквы латинского алфавита или цифры, 
+        /// при этом цифра не может быть первой.
+        /// </summary>
         static void Exercise1()
         {
             Console.WriteLine("Проверка корректности ввода логина");
@@ -138,6 +146,10 @@ namespace HomeWork5
             }
         }
 
+        /// <summary>
+        /// Задание 2
+        /// Реализация работы класса Message, содержащий статические методы для обработки текста
+        /// </summary>
         static void Exercise2()
         {
             Console.WriteLine("Проверка работы класса Message");
@@ -179,7 +191,7 @@ namespace HomeWork5
                                 Console.WriteLine($"Введение сообщение - {text}");
                                 Console.Write("Введите символ: ");
                                 char c = char.Parse(Console.ReadLine());
-                                string resultText = Message.Replace(text, c);
+                                string resultText = Message.ReplaceWordsFromMessage(text, c);
                                 Console.WriteLine($"Сообщенеи без слов, которые заканчиваются на {c}:");
                                 Console.WriteLine(resultText);
                                 break;
@@ -220,6 +232,10 @@ namespace HomeWork5
             }
         }
 
+        /// <summary>
+        /// Задание 3
+        /// Реализация метода, определяющего, является ли одна строка перестановкой другой
+        /// </summary>
         static void Exercise3()
         {
             Console.WriteLine("Проверка перстановки строк");
@@ -239,6 +255,10 @@ namespace HomeWork5
             Console.ReadKey();
         }
 
+        /// <summary>
+        /// Задание 4
+        /// Задача ЕГЭ
+        /// </summary>
         static void Exercise4()
         {
             string fileName = Environment.CurrentDirectory + @"\StudentsInfo.txt";
@@ -268,6 +288,12 @@ namespace HomeWork5
             ModifiedConsole.Pause();
         }
 
+        /// <summary>
+        /// Проверка престановки символов в строках
+        /// </summary>
+        /// <param name="s1">оригинальная строка</param>
+        /// <param name="s2">проверяемая строка</param>
+        /// <returns></returns>
         static bool IsCompare(string s1, string s2)
         {
             if (s1 == s2) return false;
@@ -279,6 +305,11 @@ namespace HomeWork5
             return true;
         }
 
+        /// <summary>
+        /// Проверка корректности ввода логина
+        /// </summary>
+        /// <param name="login">логин</param>
+        /// <returns></returns>
         static bool IsLoginCorrect(string login)
         {
             int n = login.Length;
@@ -294,18 +325,28 @@ namespace HomeWork5
             return true;
         }
 
-
+        /// <summary>
+        /// Проверка корректности ввода логина
+        /// </summary>
+        /// <param name="login">логин</param>
+        /// <param name="regex">регулярное выражение</param>
+        /// <returns></returns>
         static bool IsLoginCorrect(string login, Regex regex) => regex.IsMatch(login);
 
-        static List<StudentInfo> FindWorstStudents(string[] text)
+        /// <summary>
+        /// Нахождение худших учеников из списка по среднему баллу 
+        /// </summary>
+        /// <param name="studentsArr"></param>
+        /// <returns></returns>
+        static List<StudentInfo> FindWorstStudents(string[] studentsArr)
         {
             List<StudentInfo> stdInf = new List<StudentInfo>();
             Regex regex = new Regex(@"^[A-Za-zА-Яа-я]{1,20}\s{1}[A-Za-zА-Яа-я]{1,15}\s{1}[0-9]{1}\s{1}[0-9]{1}\s{1}[0-9]{1}$");
-            foreach (var str in text)
+            foreach (var studentStr in studentsArr)
             {
-                if (regex.IsMatch(str))
+                if (regex.IsMatch(studentStr))
                 {
-                    string[] inf = str.Split(' ');
+                    string[] inf = studentStr.Split(' ');
                     stdInf.Add(new StudentInfo
                     {
                         FIO = $"{inf[0]} {inf[1]}",

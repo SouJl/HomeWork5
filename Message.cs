@@ -6,23 +6,43 @@ using System.Threading.Tasks;
 
 namespace HomeWork5
 {
+    /// <summary>
+    /// Статических класс Message
+    /// </summary>
     static class Message
     {
-        public static string[] SelectByLength(string text, int n)
+        /// <summary>
+        /// Выбор слов не превышающих заданную длину
+        /// </summary>
+        /// <param name="message">исходное сообщение</param>
+        /// <param name="n">максимальная длина слова</param>
+        /// <returns></returns>
+        public static string[] SelectByLength(string message, int n)
         {
-            string[] words = GetWords(text);
+            string[] words = GetWords(message);
             return words.Where(w => w.Where(c => char.IsLetter(c)).ToArray().Length <= n).ToArray();
         }
 
-        public static string Replace(string text, char c)
+        /// <summary>
+        /// Удаление слов заканчивающихся на заданный символ
+        /// </summary>
+        /// <param name="message">исходное сообщение</param>
+        /// <param name="c">символ</param>
+        /// <returns></returns>
+        public static string ReplaceWordsFromMessage(string message, char c)
         {
-            string[] words = GetWords(text);
+            string[] words = GetWords(message);
             return string.Join(" ", words.Where(w => w.Last() != c));
         }
 
-        public static string Max(string text)
+        /// <summary>
+        /// Нахождение максимального по длине слова
+        /// </summary>
+        /// <param name="message">исходное сообщение</param>
+        /// <returns></returns>
+        public static string Max(string message)
         {
-            string[] words = GetWords(text);
+            string[] words = GetWords(message);
             string max = "";
             foreach (var w in words)
             {
@@ -31,10 +51,15 @@ namespace HomeWork5
             return max;
         }
 
-        public static string BuildWithMaxWords(string text)
+        /// <summary>
+        /// Построение нового сообщения из максимальных по длине слов
+        /// </summary>
+        /// <param name="message">исходное сообщение</param>
+        /// <returns></returns>
+        public static string BuildWithMaxWords(string message)
         {
-            string[] words = GetWords(text);
-            string max = Max(text);
+            string[] words = GetWords(message);
+            string max = Max(message);
             StringBuilder resut = new StringBuilder();
             foreach (var w in words)
             {
@@ -43,10 +68,15 @@ namespace HomeWork5
             return resut.ToString();
         }
 
-        public static Dictionary<string, int> WordsFrequency(string text)
+        /// <summary>
+        /// Частотный анализ сообщения
+        /// </summary>
+        /// <param name="message">исходное сообщение</param>
+        /// <returns></returns>
+        public static Dictionary<string, int> WordsFrequency(string message)
         {
             Dictionary<string, int> result = new Dictionary<string, int>();
-            string[] words = GetWords(text);
+            string[] words = GetWords(message);
             foreach (var w in words)
             {
                 if (!result.ContainsKey(w)) result.Add(w, 1);
@@ -55,9 +85,14 @@ namespace HomeWork5
             return result;
         }
 
-        private static string[] GetWords(string text)
+        /// <summary>
+        /// Разбиение сообщения на массив слов
+        /// </summary>
+        /// <param name="message">исходное сообщение</param>
+        /// <returns></returns>
+        private static string[] GetWords(string message)
         {
-            return text.Split(' ');
+            return message.Split(' ');
         }
     }
 }
